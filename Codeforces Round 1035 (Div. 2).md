@@ -96,7 +96,7 @@ int main(){
 
 ## [C. A Good Problem](https://codeforces.com/contest/2119/problem/C)
 
-思路：构造题，注意题目要求**字典序最小**，要按位与和与按位异或和相等，对于每位0,1分类讨论分析发现，两个数的时候是不可能有满足条件的结果的。然后分类讨论可以发现，当$n$为奇数时，直接全部放$l$是可以的（异或和会相互抵消，结果为l），当为偶数时，由于前面要字典序最小，所以我们也要尽可能多的放l，但是最终异或和抵消的结果是0，而按位与和不为零，但是我们可以考虑把前$n-2$个等于$l$的数与后$2$个数的$1$位错开,这样按位与的和必然是$0$,然后可以发现将$l$乘$2$然后取**high bit**就是能取到的满足条件的最小的数
+思路：构造题，注意题目要求**字典序最小**，要按位与和与按位异或和相等，对于每位0,1分类讨论分析发现，两个数的时候是不可能有满足条件的结果的。然后分类讨论可以发现，当 $n$ 为奇数时，直接全部放 $l$ 是可以的（异或和会相互抵消，结果为l），当为偶数时，由于前面要字典序最小，所以我们也要尽可能多的放l，但是最终异或和抵消的结果是0，而按位与和不为零，但是我们可以考虑把前 $n-2$ 个等于 $l$ 的数与后 $2$ 个数的 $1$ 位错开,这样按位与的和必然是 $0$ ,然后可以发现将 $l$ 乘 $2$ 然后取**high bit**就是能取到的满足条件的最小的数
 
 赛时反思：一般这种构造都是往一些特殊结果上构造，要多留意
 
@@ -122,6 +122,52 @@ void sol(){
       cout<<-1<<endl;
     }
   }
+}
+int main(){
+  ios::sync_with_stdio(0);
+  cin.tie(0);
+  cout.tie(0);
+  int t;
+  cin>>t;
+  while(t--)sol();
+  return 0;
+}
+```
+
+## [D. Token Removing](https://codeforces.com/contest/2119/problem/D)
+
+思路：不妨逆向来想，设 $f(i,j)$ $i~n$ 位取了 $j$ 个token的方案数，这样一是可以直接知道每个阶段转移时可以选的token有 $n-i+1-j+1$ 个（j包括当前刚取的token）
+
+``` cpp
+#pragma optimize(2)
+#include<bits/stdc++.h>
+#define endl '\n'
+#define debug(x) cout<<#x<<" = "<<x<<endl;
+#define vdebug(x) cout<<#x<<" : ";for(auto i:x)cout<<i<<' ';cout<<endl;
+#define ll long long
+using namespace std;
+void sol(){
+  int n;
+  ll m;
+  cin>>n>>m;
+  vector<vector<ll>>f(n+5,vector<ll>(n+5,0));
+  // f[n][0]=1,f[n][1]=n;
+  f[n+1][0]=1;
+  for(int i=n;i>=1;i--){
+    for(int j=0;j<=n-i+1;j++){
+      f[i][j]+=f[i+1][j];
+      if(j>0){
+        f[i][j]+=((f[i+1][j-1]*(n-i+2-j))%m)*i%m;
+      }
+      f[i][j]%=m;
+    }
+  }
+  ll ans=0;
+  for(int i=0;i<=n;i++){
+    ans+=f[1][i];
+    ans%=m;
+  }
+  cout<<ans<<endl;
 }
 int main(){
   ios::sync_with_stdio(0);
