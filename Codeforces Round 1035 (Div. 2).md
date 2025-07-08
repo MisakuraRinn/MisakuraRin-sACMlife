@@ -136,7 +136,7 @@ int main(){
 
 ## [D. Token Removing](https://codeforces.com/contest/2119/problem/D)
 
-思路：不妨逆向来想，设 $f(i,j)$ $i~n$ 位取了 $j$ 个token的方案数，这样一是可以直接知道每个阶段转移时可以选的token有 $n-i+1-j+1$ 个（j包括当前刚取的token）
+思路：不妨逆向来想，设 $f(i,j)$ $i~n$ 位取了 $j$ 个token的方案数，从第 $n$ 个开始决策是否取，一直取到第 $1$ 个。当取第 $i$ 个token时，因为第 $i$ 个回合能取的token区间为 $[a_i,i]$ ，可以将取token的回合也当作区间右端点来进行分配，这样就\(n-i-j+2\)个
 
 ``` cpp
 #pragma optimize(2)
